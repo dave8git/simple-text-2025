@@ -35,19 +35,7 @@ function registerFileDialogHandler() {
         } catch (err) {
             console.log('err', err);
         }
-        // const result = await dialog.showSaveDialog({
-        
-        // });
-        //console.log('saveFile from IPC', filePath);
-
     });
-
-
-
-    // try { 
-    //     await fs.writeFile(filePath, )
-    // }
-
 }
 
 module.exports = { registerFileDialogHandler };
