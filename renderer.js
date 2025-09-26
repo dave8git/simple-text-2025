@@ -7,6 +7,10 @@ document.addEventListener('keydown',
     deBounce(keydownAction, 100)
 )
 
+editor.addEventListener("input", 
+    deBounce(saveFile, 1000)
+)
+
 async function keydownAction(event) {
         if (event.ctrlKey && event.key.toLowerCase() === 'o') {
             event.preventDefault();
@@ -23,28 +27,21 @@ async function keydownAction(event) {
 }
 
 async function openFile() {
-    const filePath = await window.electronAPI.openFile();
-    console.log('content', filePath.content);
-    editor.textContent = filePath.content;
-    return filePath;
+    currentFilePath = await window.electronAPI.openFile();
+    console.log('content', currentFilePath);
+    editor.textContent = currentFilePath.content;
 }
 
 async function saveFile() {
+    console.log('autoSave')
     const data = editor.textContent;
-    const filePath = await window.electronAPI.saveFile(data);
-    return filePath;
+    await window.electronAPI.autoSave(currentFilePath, data);
 }
 
 function deBounce(cb, delay) {
     let stId; 
-    return (event) => {
+    return (...args) => {
         clearTimeout(stId);
-        stId = setTimeout(() => cb(event), delay)  // macroTask - funkcja wykona się na końcu kolejki
+        stId = setTimeout(() => cb(...args), delay)  // macroTask - funkcja wykona się na końcu kolejki
     }
 }
-
-const autoSave = deBounce((content) => {
-    console.log('debounced!', content);
-}, 1000);
-
-editor.addEventListener("input", (e) => autoSave(e.target.value));

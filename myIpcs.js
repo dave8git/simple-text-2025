@@ -44,6 +44,7 @@ function registerFileDialogHandler() {
     });
 
     ipcMain.handle("autoSave", async (event, { filePath, data }) => {
+        console.log('autosave')
         try {
             if(filePath) {
                 return await saveToFile(filePath, data);
